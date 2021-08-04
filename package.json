@@ -1,0 +1,24 @@
+{
+  "name": "ettt-api",
+  "version": "1.0.0",
+  "description": "ettt api for fun et simple tasks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElliotThiebaut/ettt-api.git"
+  },
+  "author": "Elliot Thiebaut]",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ElliotThiebaut/ettt-api/issues"
+  },
+  "homepage": "https://github.com/ElliotThiebaut/ettt-api#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
+}
