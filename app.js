@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const {MongoClient} = require('mongodb');
+const db = require('db-functions');
 const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config()
 
@@ -20,34 +21,6 @@ async function mongoConnect() {
     }
 }
 
-
-
-
-async function createMessage(newMessage) {
-    await msgColl.insertOne(newMessage)
-}
-
-async function findUserMessages(nameUser) {
-    return await msgColl.find({username: nameUser}).toArray()
-}
-
-async function findAllMessages() {
-    return await msgColl.find().toArray()
-}
-
-async function updateMessage(id, updatedMessage) {
-    const objectId = new ObjectId(id);
-    await msgColl.updateOne({_id : objectId}, {$set: updatedMessage})
-}
-
-async function deleteMessage(id) {
-    const objectId = new ObjectId(id);
-    await msgColl.deleteOne({_id : objectId})
-}
-
-
-
-
 app.use(cors());
 
 // Configuring body parser middleware
@@ -57,13 +30,13 @@ app.use(bodyParser.json());
 
 
 app.get('/messages', async (req, res) => {
-    res.send(await findAllMessages())
+    res.send(await db.findAllMessages())
 });
 
 
 app.get('/messages/:username', async (req, res) => {
 
-    res.send(await findUserMessages(req.params.username))
+    res.send(await db.findUserMessages(req.params.username))
 });
 
 
@@ -72,7 +45,7 @@ app.get('/messages/:username', async (req, res) => {
 app.post('/new-message', async (req, res) => {
 
     const newMessage = req.body
-    await createMessage({
+    await db.createMessage({
         username: newMessage.name,
         message: newMessage.message
     })
@@ -82,7 +55,7 @@ app.post('/new-message', async (req, res) => {
 
 
 app.post('/update-message/:id', async (req, res) => {
-    await updateMessage(req.params.id, req.body)
+    await db.updateMessage(req.params.id, req.body)
     res.send('Messaged updated chief')
 });
 
@@ -90,7 +63,7 @@ app.post('/update-message/:id', async (req, res) => {
 
 
 app.delete('/delete-message/:id', async (req, res) => {
-    await deleteMessage(req.params.id)
+    await db.deleteMessage(req.params.id)
     res.send('Message deleted chief')
 })
 
