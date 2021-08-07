@@ -1,10 +1,12 @@
 {
   "name": "ettt-api",
   "version": "1.0.0",
+  "type": "module",
   "description": "ettt api for fun et simple tasks",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",

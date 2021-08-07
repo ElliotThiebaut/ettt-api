@@ -1,16 +1,16 @@
-const express = require('express')
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const {MongoClient} = require('mongodb');
-const db = require('db-functions');
+import express from 'express';
+import bodyParser from "body-parser";
+import {MongoClient} from 'mongodb'
+import {ObjectId} from "mongodb";
+import cors from 'cors'
+import dotenv from 'dotenv'
 
-require('dotenv').config()
-
+dotenv.config()
 const app = express();
 const port = 3000;
 const mongoUri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/?authSource=admin`
 const client = new  MongoClient(mongoUri)
-let msgColl = client.db('api-messages').collection('messages')
+let msgColl = client.db('risichat').collection('general')
 
 async function mongoConnect() {
     try {
@@ -21,6 +21,7 @@ async function mongoConnect() {
     }
 }
 
+
 app.use(cors());
 
 // Configuring body parser middleware
@@ -28,15 +29,37 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
+let createMessage = async (newMessage) => {
+    await msgColl.insertOne(newMessage)
+}
+
+let findUserMessages = async (nameUser) => {
+    return await msgColl.find({username: nameUser}).toArray()
+}
+
+let findAllMessages = async () => {
+    return await msgColl.find().toArray()
+}
+
+let updateMessage = async (id, updatedMessage) => {
+    const objectId = new ObjectId(id);
+    await msgColl.updateOne({_id : objectId}, {$set: updatedMessage})
+}
+
+let deleteMessage = async (id) => {
+    const objectId = new ObjectId(id);
+    await msgColl.deleteOne({_id : objectId})
+}
+
 
 app.get('/messages', async (req, res) => {
-    res.send(await db.findAllMessages())
+    res.send(await findAllMessages())
 });
 
 
 app.get('/messages/:username', async (req, res) => {
 
-    res.send(await db.findUserMessages(req.params.username))
+    res.send(await findUserMessages(req.params.username))
 });
 
 
@@ -45,9 +68,13 @@ app.get('/messages/:username', async (req, res) => {
 app.post('/new-message', async (req, res) => {
 
     const newMessage = req.body
-    await db.createMessage({
-        username: newMessage.name,
-        message: newMessage.message
+    let seqDoc = await client.db('risichat').collection('counters').findOneAndUpdate({id: 'messageId'}, {$inc: {seqValue: 1}}, {returnOriginal: false});
+
+    await createMessage({
+        message_id: seqDoc.value.seqValue,
+        timestamp: Date.now(),
+        username: newMessage.username,
+        message_content: newMessage.message_content
     })
 
     res.send('Message received chief')
@@ -55,7 +82,7 @@ app.post('/new-message', async (req, res) => {
 
 
 app.post('/update-message/:id', async (req, res) => {
-    await db.updateMessage(req.params.id, req.body)
+    await updateMessage(req.params.id, req.body)
     res.send('Messaged updated chief')
 });
 
@@ -63,13 +90,9 @@ app.post('/update-message/:id', async (req, res) => {
 
 
 app.delete('/delete-message/:id', async (req, res) => {
-    await db.deleteMessage(req.params.id)
+    await deleteMessage(req.params.id)
     res.send('Message deleted chief')
 })
-
-
-
-
 
 
 mongoConnect().catch(console.error);
