@@ -1,5 +1,5 @@
 import express from "express";
-import { msgColl } from "../../db-connexion.js";
+import { msgColl, client } from "../../db-connexion.js";
 
 export const router = express.Router()
 

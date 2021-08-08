@@ -11,9 +11,7 @@ import {router as routerMessagesDelete} from "./routes/messages/messages-delete.
 const app = express();
 const port = 3000;
 
-app.use(cors({
-    origin: '*'
-}));
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
