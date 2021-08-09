@@ -4,13 +4,28 @@ import { msgColl } from "../../db-connexion.js";
 export const router = express.Router()
 
 // GET - retrieve all messages
-router.get('/messages', async (req, res) => {
-    res.send(await msgColl.find().toArray())
+router.get('/risichat/messages', async (req, res) => {
+
+    let responseDB = await msgColl.find().toArray()
+
+    if (responseDB.length) {
+        res.send(responseDB)
+    } else {
+        res.status(404).send({message: 'No message found'})
+    }
+
 });
 
 
 //GET - retrieve messages from a specified user
-router.get('/messages/:username', async (req, res) => {
+router.get('/risichat/messages/:username', async (req, res) => {
 
-    res.send(await msgColl.find({username: req.params.username}).toArray())
+    let responseDB = await msgColl.find({username: req.params.username}).toArray()
+
+    if (responseDB.length) {
+        res.send(responseDB)
+    } else {
+        res.status(404).send({message: `No message found for user ${req.params.username}`})
+    }
+
 });

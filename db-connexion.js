@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config()
 const mongoUri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/?authSource=admin`
 const client = new  MongoClient(mongoUri)
-const msgColl = client.db('risichat').collection('general')
+const msgColl = client.db('risichat').collection(process.env.COLLECTION_NAME)
 
 async function mongoConnect() {
     try {
