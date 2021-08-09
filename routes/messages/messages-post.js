@@ -4,7 +4,7 @@ import { msgColl, client } from "../../db-connexion.js";
 export const router = express.Router()
 
 //POST - create a new message
-router.post('/new-message', async (req, res) => {
+router.post('/risichat/new-message', async (req, res) => {
 
     const newMessage = req.body
     let seqDoc = await client.db('risichat').collection('counters').findOneAndUpdate({id: 'messageId'}, {$inc: {seqValue: 1}}, {returnOriginal: false});
@@ -21,7 +21,7 @@ router.post('/new-message', async (req, res) => {
 
 
 //POST - update a existing message
-router.post('/update-message/:id', async (req, res) => {
+router.post('/risichat/update-message/:id', async (req, res) => {
 
     await msgColl.updateOne({message_id : parseInt(req.params.id)}, {$set: req.body})
     res.send('Messaged updated chief')
