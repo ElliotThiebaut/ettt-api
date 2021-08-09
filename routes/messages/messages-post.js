@@ -18,7 +18,7 @@ router.post('/risichat/new-message', async (req, res) => {
 
     console.log(addedMessage)
     if (addedMessage.acknowledged) {
-        res.send({message:'Message added'})
+        res.status(201).send({message:'Message added'})
     } else {
         res.status(500).send({message:'A error occurred while adding the message'})
     }
@@ -35,7 +35,7 @@ router.post('/risichat/update-message/:id', async (req, res) => {
     if (updatedMessage.acknowledged && updatedMessage.matchedCount){
         res.send({message:'Message updated'})
     } else if (!updatedMessage.matchedCount) {
-        res.status(404).send({message:`No message found for message_id ${req.params.id}`})
+        res.status(204).send({message:`No message found for message_id ${req.params.id}`})
     } else {
         res.status(500).send({message:'A error occurred while updating the message'})
     }

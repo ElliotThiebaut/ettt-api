@@ -12,8 +12,8 @@ router.delete('/risichat/delete-message/:id', async (req, res) => {
     if (deletedMessage.acknowledged && deletedMessage.deletedCount){
         res.send({message:'Message deleted'})
     } else if (!deletedMessage.deletedCount) {
-        res.status(404).send({message:`No message found for message_id ${req.params.id}`})
+        res.status(204).send({message:`No message found for message_id ${req.params.id}`})
     } else {
-        res.status(500).send({message:'A error occurred while updating the message'})
+        res.status(500).send({message:'A error occurred while deleting the message'})
     }
 })
