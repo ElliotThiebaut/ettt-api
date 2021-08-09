@@ -11,7 +11,7 @@ router.get('/risichat/messages', async (req, res) => {
     if (responseDB.length) {
         res.send(responseDB)
     } else {
-        res.status(404).send({message: 'No message found'})
+        res.status(204).send({message: 'No message found'})
     }
 
 });
@@ -25,7 +25,7 @@ router.get('/risichat/messages/:username', async (req, res) => {
     if (responseDB.length) {
         res.send(responseDB)
     } else {
-        res.status(404).send({message: `No message found for user ${req.params.username}`})
+        res.status(204).send({message: `No message found for user ${req.params.username}`})
     }
 
 });
