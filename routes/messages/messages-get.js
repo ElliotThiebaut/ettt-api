@@ -8,8 +8,6 @@ router.get('/risichat/messages', async (req, res) => {
 
     let responseDB = await msgColl.find().toArray()
 
-    console.log(responseDB.length)
-
     if (responseDB.length) {
         res.send(responseDB)
     } else if (responseDB.length === 0) {
