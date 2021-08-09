@@ -9,20 +9,32 @@ router.post('/risichat/new-message', async (req, res) => {
     const newMessage = req.body
     let seqDoc = await client.db('risichat').collection('counters').findOneAndUpdate({id: 'messageId'}, {$inc: {seqValue: 1}}, {returnOriginal: false});
 
-    await msgColl.insertOne({
+    let addedMessage = await msgColl.insertOne({
         message_id: seqDoc.value.seqValue,
         timestamp: Date.now(),
         username: newMessage.username,
         message_content: newMessage.message_content
     })
 
-    res.send('Message received chief')
+    console.log(addedMessage)
+    if (addedMessage.acknowledged) {
+        res.send({message:'Message added'})
+    } else {
+        res.status(500).send({message:'A error occurred while adding the message'})
+    }
+
+
 });
 
 
 //POST - update a existing message
 router.post('/risichat/update-message/:id', async (req, res) => {
 
-    await msgColl.updateOne({message_id : parseInt(req.params.id)}, {$set: req.body})
-    res.send('Messaged updated chief')
+    let updatedMessage = await msgColl.updateOne({message_id : parseInt(req.params.id)}, {$set: req.body})
+
+    if (updatedMessage.acknowledged){
+        res.send({message:'Message updated'})
+    } else {
+        res.status(500).send({message:'A error occurred while updating the message'})
+    }
 });
