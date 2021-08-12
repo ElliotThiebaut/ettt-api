@@ -11,7 +11,7 @@ router.get('/risichat/messages', async (req, res) => {
     if (responseDB.length) {
         res.send({
             metadata: {
-                messageCount: responseDB.length
+                nbMessage: responseDB.length
             },
             data: responseDB
         })
@@ -32,7 +32,7 @@ router.get('/risichat/messages/:username', async (req, res) => {
     if (responseDB.length) {
         res.send({
             metadata: {
-                messageCount: responseDB.length
+                nbMessage: responseDB.length
             },
             data: responseDB
         })
