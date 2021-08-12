@@ -9,7 +9,12 @@ router.get('/risichat/messages', async (req, res) => {
     let responseDB = await msgColl.find().toArray()
 
     if (responseDB.length) {
-        res.send(responseDB)
+        res.send({
+            metadata: {
+                numberOfMessages: responseDB.length
+            },
+            data: responseDB
+        })
     } else if (responseDB.length === 0) {
         res.status(204).send()
     } else {
@@ -25,7 +30,12 @@ router.get('/risichat/messages/:username', async (req, res) => {
     let responseDB = await msgColl.find({username: req.params.username}).toArray()
 
     if (responseDB.length) {
-        res.send(responseDB)
+        res.send({
+            metadata: {
+                numberOfMessages: responseDB.length
+            },
+            data: responseDB
+        })
     } else if (responseDB.length === 0) {
         res.status(204).send()
     } else {
