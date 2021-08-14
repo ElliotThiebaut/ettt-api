@@ -5,7 +5,7 @@ export const router = express.Router()
 
 //GET - retrieve all users
 router.get('/risichat/users', async (req, res) => {
-    const responseDB = await dbRisichat.collection('users').find().toArray()
+    const responseDB = await dbRisichat.collection('users').find().project({password: 0}).toArray()
 
     if (responseDB.length) {
         res.send({
@@ -24,7 +24,7 @@ router.get('/risichat/users', async (req, res) => {
 //GET - retrieve specific user
 router.get('/risichat/users/:id', async (req, res) => {
 
-    const responseDB = await dbRisichat.collection('users').find({user_id: parseInt(req.params.id)}).toArray()
+    const responseDB = await dbRisichat.collection('users').find({user_id: parseInt(req.params.id)}).project({password: 0}).toArray()
 
     if (responseDB.length) {
         res.send({
