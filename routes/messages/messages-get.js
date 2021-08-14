@@ -1,57 +1,40 @@
 import express from "express";
-import { msgColl } from "../../db-connexion.js";
+import { dbRisichat } from "../../db-connexion.js";
 
 export const router = express.Router()
+
+
 
 // GET - retrieve all messages
 router.get('/risichat/messages', async (req, res) => {
 
     let optionsQuery = {
-        sort: {message_id: -1},
+        sort: {message_id: -1}
     }
 
-    const queryMaker = (order, limit) => {
-        if (order === 'first') {
-            return {
-                sort: {message_id: 1},
-                limit: parseInt(limit)
-            }
-        } else if (order === 'last') {
-             return {
-                 sort: {message_id: -1},
-                 limit: parseInt(limit)
-             }
-        } else {
-            return false
-        }
+    if (req.query.order && req.query.order === 'first') {
+        optionsQuery.sort = {message_id: 1}
+    }
+    if (req.query.limit) {
+        optionsQuery.limit = parseInt(req.query.limit)
+    }
+    if (req.query.skip) {
+        optionsQuery.skip = parseInt(req.query.skip)
     }
 
-    if (req.query.limit && req.query.order) {
-        optionsQuery = queryMaker(req.query.order, req.query.limit)
-    } else if (req.query.limit && !req.query.order) {
-        optionsQuery = queryMaker('last', req.query.limit)
-    } else if (!req.query.limit && req.query.order) {
-        optionsQuery = queryMaker(req.query.order, 0)
-    }
+    const responseDB = await dbRisichat.collection('general').find({}, optionsQuery).toArray()
 
-    if (optionsQuery) {
-        const responseDB = await msgColl.find({}, optionsQuery).toArray()
-
-        if (responseDB.length) {
-            res.send({
-                metadata: {
-                    nbMessage: responseDB.length
-                },
-                data: responseDB
-            })
-        } else if (responseDB.length === 0) {
-            res.status(204).send()
-        } else {
-            res.status(500).send({message: 'A error occurred while retrieving the messages'})
-        }
-
+    if (responseDB.length) {
+        res.send({
+            metadata: {
+                nbMessage: responseDB.length
+            },
+            data: responseDB
+        })
+    } else if (responseDB.length === 0) {
+        res.status(204).send()
     } else {
-        res.status(400).send({message: 'An error occurred with the parameter of the request'})
+        res.status(500).send({message: 'A error occurred while retrieving the messages'})
     }
 
 });
@@ -61,51 +44,32 @@ router.get('/risichat/messages', async (req, res) => {
 router.get('/risichat/messages/:username', async (req, res) => {
 
     let optionsQuery = {
-        sort: {message_id: -1},
+        sort: {message_id: -1}
     }
 
-    const queryMaker = (order, limit) => {
-        if (order === 'first') {
-            return {
-                sort: {message_id: 1},
-                limit: parseInt(limit)
-            }
-        } else if (order === 'last') {
-            return {
-                sort: {message_id: -1},
-                limit: parseInt(limit)
-            }
-        } else {
-            return false
-        }
+    if (req.query.order && req.query.order === 'first') {
+        optionsQuery.sort = {message_id: 1}
+    }
+    if (req.query.limit) {
+        optionsQuery.limit = parseInt(req.query.limit)
+    }
+    if (req.query.skip) {
+        optionsQuery.skip = parseInt(req.query.skip)
     }
 
-    if (req.query.limit && req.query.order) {
-        optionsQuery = queryMaker(req.query.order, req.query.limit)
-    } else if (req.query.limit && !req.query.order) {
-        optionsQuery = queryMaker('last', req.query.limit)
-    } else if (!req.query.limit && req.query.order) {
-        optionsQuery = queryMaker(req.query.order, 0)
-    }
+    const responseDB = await dbRisichat.collection('general').find({username: req.params.username}, optionsQuery).toArray()
 
-    if (optionsQuery) {
-        const responseDB = await msgColl.find({username: req.params.username}, optionsQuery).toArray()
-
-        if (responseDB.length) {
-            res.send({
-                metadata: {
-                    nbMessage: responseDB.length
-                },
-                data: responseDB
-            })
-        } else if (responseDB.length === 0) {
-            res.status(204).send()
-        } else {
-            res.status(500).send({message: 'A error occurred while retrieving the messages'})
-        }
-
+    if (responseDB.length) {
+        res.send({
+            metadata: {
+                nbMessage: responseDB.length
+            },
+            data: responseDB
+        })
+    } else if (responseDB.length === 0) {
+        res.status(204).send()
     } else {
-        res.status(400).send({message: 'An error occurred with the parameter of the request'})
+        res.status(500).send({message: 'A error occurred while retrieving the messages'})
     }
 
 });
