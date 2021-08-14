@@ -123,7 +123,7 @@ Contributions are always welcome ! Dont hesite to contribute even if it's your f
 3. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
 4. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 5. Push to the Branch (`git push origin feature/AmazingFeature`)
-6. Open a Pull Request to the main branch
+6. Open a Pull Request to the dev branch
 
 
 
