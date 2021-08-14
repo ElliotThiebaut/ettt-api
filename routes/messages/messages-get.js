@@ -22,7 +22,7 @@ router.get('/risichat/messages', async (req, res) => {
         optionsQuery.skip = parseInt(req.query.skip)
     }
 
-    const responseDB = await dbRisichat.collection('risichat').find({}, optionsQuery).toArray()
+    const responseDB = await dbRisichat.collection('general').find({}, optionsQuery).toArray()
 
     if (responseDB.length) {
         res.send({
@@ -57,7 +57,7 @@ router.get('/risichat/messages/:username', async (req, res) => {
         optionsQuery.skip = parseInt(req.query.skip)
     }
 
-    const responseDB = await dbRisichat.collection('risichat').find({username: req.params.username}, optionsQuery).toArray()
+    const responseDB = await dbRisichat.collection('general').find({username: req.params.username}, optionsQuery).toArray()
 
     if (responseDB.length) {
         res.send({

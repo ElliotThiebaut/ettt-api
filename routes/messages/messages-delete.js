@@ -6,7 +6,7 @@ export const router = express.Router()
 //DELETE - delete a existing message
 router.delete('/risichat/delete-message/:id', async (req, res) => {
 
-    let deletedMessage = await dbRisichat.collection('risichat').deleteOne({message_id : parseInt(req.params.id)})
+    let deletedMessage = await dbRisichat.collection('general').deleteOne({message_id : parseInt(req.params.id)})
 
 
     if (deletedMessage.acknowledged && deletedMessage.deletedCount){
