@@ -1,5 +1,5 @@
 import express from "express";
-import { msgColl, client } from "../../db-connexion.js";
+import { dbRisichat, client } from "../../db-connexion.js";
 
 export const router = express.Router()
 
@@ -9,7 +9,7 @@ router.post('/risichat/new-message', async (req, res) => {
     const newMessage = req.body
     let seqDoc = await client.db('risichat').collection('counters').findOneAndUpdate({id: 'messageId'}, {$inc: {seqValue: 1}}, {returnOriginal: false});
 
-    let addedMessage = await msgColl.insertOne({
+    let addedMessage = await dbRisichat.collection('risichat').insertOne({
         message_id: seqDoc.value.seqValue,
         timestamp: Date.now(),
         username: newMessage.username,
@@ -29,7 +29,7 @@ router.post('/risichat/new-message', async (req, res) => {
 //POST - update a existing message
 router.post('/risichat/update-message/:id', async (req, res) => {
 
-    let updatedMessage = await msgColl.updateOne({message_id : parseInt(req.params.id)}, {$set: req.body})
+    let updatedMessage = await dbRisichat.collection('risichat').updateOne({message_id : parseInt(req.params.id)}, {$set: req.body})
 
     if (updatedMessage.acknowledged && updatedMessage.matchedCount){
         res.send({message:'Message updated'})

@@ -1,5 +1,5 @@
 import express from "express";
-import { msgColl } from "../../db-connexion.js";
+import { dbRisichat } from "../../db-connexion.js";
 
 export const router = express.Router()
 
@@ -22,7 +22,7 @@ router.get('/risichat/messages', async (req, res) => {
         optionsQuery.skip = parseInt(req.query.skip)
     }
 
-    const responseDB = await msgColl.find({}, optionsQuery).toArray()
+    const responseDB = await dbRisichat.collection('risichat').find({}, optionsQuery).toArray()
 
     if (responseDB.length) {
         res.send({
@@ -57,7 +57,7 @@ router.get('/risichat/messages/:username', async (req, res) => {
         optionsQuery.skip = parseInt(req.query.skip)
     }
 
-    const responseDB = await msgColl.find({username: req.params.username}, optionsQuery).toArray()
+    const responseDB = await dbRisichat.collection('risichat').find({username: req.params.username}, optionsQuery).toArray()
 
     if (responseDB.length) {
         res.send({
