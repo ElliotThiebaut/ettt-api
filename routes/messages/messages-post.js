@@ -17,7 +17,7 @@ router.post('/risichat/new-message', async (req, res) => {
     })
 
     if (addedMessage.acknowledged) {
-        res.status(201).send({message:'Message added'})
+        res.status(201).send({message:'Message added', message_id: seqDoc.value.seqValue})
     } else {
         res.status(500).send({message:'A error occurred while adding the message'})
     }

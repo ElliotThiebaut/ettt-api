@@ -20,7 +20,7 @@ router.post('/risichat/new-user', async (req, res) => {
     })
 
     if (addedUser.acknowledged) {
-        res.status(201).send({message:'User added'})
+        res.status(201).send({message:'User added', user_id:seqDoc.value.seqValue})
     } else {
         res.status(500).send({message:'A error occurred while adding the user'})
     }
