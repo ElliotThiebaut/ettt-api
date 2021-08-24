@@ -1,12 +1,13 @@
 import express from "express";
 import { dbRisichat } from "../../db-connexion.js";
+import {verifyToken as auth} from "../../middleware/auth.js";
 
 export const router = express.Router()
 
 
 
 // GET - retrieve all messages
-router.get('/risichat/messages', async (req, res) => {
+router.get('/risichat/messages', auth, async (req, res) => {
 
     let optionsQuery = {
         sort: {message_id: -1}
