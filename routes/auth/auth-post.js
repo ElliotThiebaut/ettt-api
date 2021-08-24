@@ -1,7 +1,9 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import {dbRisichat} from "../../db-connexion.js";
 import jwt from "jsonwebtoken";
+import {dbRisichat} from "../../db-connexion.js";
+import {verifyToken as auth} from "../../middleware/auth.js";
+import {ObjectId} from "mongodb";
 
 export const router = express.Router()
 const saltRounds = 10;
@@ -93,5 +95,21 @@ router.post('/risichat/auth/login', async (req, res, next) => {
         console.log('Invalid credentials in /risichat/auth/login')
         res.status(400).send({message: 'Invalid credentials'})
         return next();
+    }
+})
+
+router.post('/risichat/auth/disconnect', auth, async (req, res, next) => {
+    if (req.tokenUser) {
+        let updatedUser = await dbRisichat.collection('users').updateOne({_id: new ObjectId(req.tokenUser.user_id)}, {$set:{accessToken: ''}})
+        if (updatedUser.acknowledged) {
+            console.log(`User ${req.tokenUser.user_id} disconnected successfully in /risichat/auth/disconnect`)
+            res.send({message: 'User successfully disconnected', id: req.tokenUser.user_id})
+        } else {
+            console.log(`Error while deleting user accessToken in /risichat/auth/disconnect`)
+            res.status(500).send({message:'A error occurred while updating the users accessToken'})
+        }
+    } else {
+        console.log(`Error while reading the token in /risichat/auth/disconnect`)
+        res.status(500).send({message:'Error while reading the accessToken'})
     }
 })
