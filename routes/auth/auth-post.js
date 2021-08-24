@@ -24,6 +24,13 @@ router.post('/risichat/auth/register', async (req, res,next) => {
         return next();
     }
 
+    let findDuplicateUser = await dbRisichat.collection('users').findOne({email: newUser.email})
+    if (findDuplicateUser) {
+        console.log('Email already used in /risichat/auth/register')
+        res.status(400).send({message: 'Email already used'})
+        return next();
+    }
+
     let addedUser = await dbRisichat.collection('users').insertOne({
         password: passwordHash,
         username: newUser.username,
