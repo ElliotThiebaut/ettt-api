@@ -1,33 +1,14 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import {client, dbRisichat} from "../../db-connexion.js";
+import {dbRisichat} from "../../db-connexion.js";
+import {ObjectId} from "mongodb";
+import {verifyToken as auth} from "../../middleware/auth.js";
 
 export const router = express.Router()
 const saltRounds = 10;
 
-//POST - create a new user
-router.post('/risichat/new-user', async (req, res) => {
-    const newUser = req.body
-    let seqDoc = await client.db('risichat').collection('counters').findOneAndUpdate({id: 'userId'}, {$inc: {seqValue: 1}}, {returnOriginal: false});
-    const passwordHash = await bcrypt.hash(newUser.password, saltRounds)
-
-    let addedUser = await dbRisichat.collection('users').insertOne({
-        user_id: seqDoc.value.seqValue,
-        password: passwordHash,
-        username: newUser.username,
-        email: newUser.email,
-        roles: ['user']
-    })
-
-    if (addedUser.acknowledged) {
-        res.status(201).send({message:'User added', user_id:seqDoc.value.seqValue})
-    } else {
-        res.status(500).send({message:'A error occurred while adding the user'})
-    }
-})
-
 //POST - update a existing user
-router.post('/risichat/update-user/:id', async (req, res) => {
+router.post('/risichat/update-user/:id', auth, async (req, res) => {
     const updateUser = {
         $set: {}
     }
@@ -46,7 +27,7 @@ router.post('/risichat/update-user/:id', async (req, res) => {
     }
 
     
-    let updatedUser = await dbRisichat.collection('users').updateOne({user_id : parseInt(req.params.id)}, updateUser)
+    let updatedUser = await dbRisichat.collection('users').updateOne({_id : new ObjectId(req.params.id)}, updateUser)
 
     if (updatedUser.acknowledged && updatedUser.matchedCount){
         res.send({message:'User updated'})

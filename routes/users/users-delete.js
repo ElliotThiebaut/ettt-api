@@ -1,12 +1,13 @@
 import express from "express";
 import { dbRisichat } from "../../db-connexion.js";
+import {ObjectId} from "mongodb";
 
 export const router = express.Router()
 
 //DELETE - delete a existing message
 router.delete('/risichat/delete-user/:id', async (req, res) => {
 
-    let deletedUser = await dbRisichat.collection('users').deleteOne({user_id : parseInt(req.params.id)})
+    let deletedUser = await dbRisichat.collection('users').deleteOne({_id: new ObjectId(req.params.id)})
 
 
     if (deletedUser.acknowledged && deletedUser.deletedCount){
