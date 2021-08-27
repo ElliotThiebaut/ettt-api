@@ -22,11 +22,9 @@ router.post('/risichat/new-message', auth, async (req, res, next) => {
         timestamp: Date.now(),
         edited_timestamp: null,
         content: xss(newMessage.content),
-        reactions: {}
     })
 
     if (addedMessage.acknowledged) {
-        console.log(`Message ${addedMessage.insertedId.toLocaleString()} added in /messages/new-message`)
         res.status(201).send({message:'Message added', id: addedMessage.insertedId.toLocaleString()})
     } else {
         console.log('A error occurred while adding the message in /messages/new-message')
