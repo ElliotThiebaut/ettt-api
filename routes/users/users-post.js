@@ -8,7 +8,17 @@ export const router = express.Router()
 const saltRounds = 10;
 
 //POST - update a existing user
-router.post('/risichat/update-user/:id', auth, async (req, res) => {
+router.post('/risichat/update-user/:id', auth, async (req, res, next) => {
+
+    //TODO Check if auth user is the user being modified
+
+    let dbUser = await dbRisichat.collection('users').findOne({_id: new ObjectId(req.params.id)})
+    if (dbUser._id.toLocaleString() !== req.tokenUser.user_id) {
+        console.log('Not authorized to update user in /users/update-user')
+        res.status(401).send({message: 'Not authorized to update user'})
+        return next()
+    }
+
     const updateUser = {
         $set: {}
     }

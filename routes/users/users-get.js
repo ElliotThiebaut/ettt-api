@@ -25,6 +25,7 @@ router.get('/risichat/users', async (req, res) => {
 //GET - retrieve specific user
 router.get('/risichat/users/:id', async (req, res) => {
 
+    //TODO Change .find() to .findOnde()
     const responseDB = await dbRisichat.collection('users').find({_id: new ObjectId(req.params.id)}).project({password: 0, verificationToken: 0, accessToken: 0}).toArray()
 
     if (responseDB.length) {
