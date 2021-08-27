@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import {dbRisichat} from "../../db-connexion.js";
 import {verifyToken as auth} from "../../middleware/auth.js";
 import {ObjectId} from "mongodb";
+import xss from "xss";
 
 export const router = express.Router()
 const saltRounds = 10;
@@ -36,7 +37,7 @@ router.post('/risichat/auth/register', async (req, res,next) => {
 
     let addedUser = await dbRisichat.collection('users').insertOne({
         password: passwordHash,
-        username: newUser.username,
+        username: xss(newUser.username),
         email: newUser.email.toLowerCase(),
         avatarUrl: 'https://static.thenounproject.com/png/1995052-200.png',
         verified: 'pending',

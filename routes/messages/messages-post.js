@@ -2,6 +2,7 @@ import express from "express";
 import { dbRisichat, client } from "../../db-connexion.js";
 import {ObjectId} from "mongodb";
 import {verifyToken as auth} from "../../middleware/auth.js";
+import xss from "xss"
 
 export const router = express.Router()
 
@@ -14,7 +15,7 @@ router.post('/risichat/new-message', auth, async (req, res) => {
         author_id: req.tokenUser.user_id,
         timestamp: Date.now(),
         edited_timestamp: null,
-        content: newMessage.content,
+        content: xss(newMessage.content),
         reactions: []
     })
 
