@@ -1,23 +1,25 @@
 import express from "express";
 import { dbRisichat, client } from "../../db-connexion.js";
+import {ObjectId} from "mongodb";
+import {verifyToken as auth} from "../../middleware/auth.js";
 
 export const router = express.Router()
 
 //POST - create a new message
-router.post('/risichat/new-message', async (req, res) => {
+router.post('/risichat/new-message', auth, async (req, res) => {
 
     const newMessage = req.body
-    let seqDoc = await client.db('risichat').collection('counters').findOneAndUpdate({id: 'messageId'}, {$inc: {seqValue: 1}}, {returnOriginal: false});
 
     let addedMessage = await dbRisichat.collection('general').insertOne({
-        message_id: seqDoc.value.seqValue,
+        author_id: req.tokenUser.user_id,
         timestamp: Date.now(),
-        username: newMessage.username,
-        message_content: newMessage.message_content
+        edited_timestamp: null,
+        content: newMessage.content,
+        reactions: []
     })
 
     if (addedMessage.acknowledged) {
-        res.status(201).send({message:'Message added', message_id: seqDoc.value.seqValue})
+        res.status(201).send({message:'Message added', id: addedMessage.insertedId.toLocaleString()})
     } else {
         res.status(500).send({message:'A error occurred while adding the message'})
     }
