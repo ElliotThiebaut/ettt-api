@@ -10,8 +10,6 @@ const saltRounds = 10;
 //POST - update a existing user
 router.post('/risichat/update-user/:id', auth, async (req, res, next) => {
 
-    //TODO Check if auth user is the user being modified
-
     let dbUser = await dbRisichat.collection('users').findOne({_id: new ObjectId(req.params.id)})
     if (dbUser._id.toLocaleString() !== req.tokenUser.user_id) {
         console.log('Not authorized to update user in /users/update-user')
@@ -42,8 +40,10 @@ router.post('/risichat/update-user/:id', auth, async (req, res, next) => {
     if (updatedUser.acknowledged && updatedUser.matchedCount){
         res.send({message:'User updated'})
     } else if (!updatedUser.matchedCount) {
+        console.log(`No user found with id ${req.params.id} in /users/update`)
         res.status(204).send()
     } else {
+        console.log(`A error occurred while updating the user with id ${req.params.id} in /users/update`)
         res.status(500).send({message:'A error occurred while updating the user'})
     }
 })
