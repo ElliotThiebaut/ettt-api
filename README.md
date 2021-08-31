@@ -92,6 +92,7 @@ This project uses NodeJS as it's runtime, therefore it is required to have at le
    DB_PASSWORD=[mongoDB password]
    DB_HOST=[mongoDB access url]
    COLLECTION_NAME=[mongoDB collection]
+   TOKEN_KEY=[JWT key]
    ```
 
 

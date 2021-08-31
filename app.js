@@ -9,6 +9,7 @@ import {router as routerMessagesDelete} from "./routes/messages/messages-delete.
 import {router as routerUsersGet} from "./routes/users/users-get.js";
 import {router as routerUsersPost} from "./routes/users/users-post.js";
 import {router as routerUsersDelete} from "./routes/users/users-delete.js";
+import {router as routerAuthPost} from "./routes/auth/auth-post.js"
 
 // Configuring express and its middleware
 const app = express();
@@ -25,6 +26,7 @@ app.use(routerMessagesDelete)
 app.use(routerUsersGet)
 app.use(routerUsersPost)
 app.use(routerUsersDelete)
+app.use(routerAuthPost)
 
 //Connecting to the mongoDB database
 mongoConnect().catch(console.error);
