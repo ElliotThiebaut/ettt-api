@@ -36,7 +36,7 @@ jobs:
           KEY: ${{ secrets.SSHKEY }}
         with:
           source: "."
-          target: "/var/www/api.ettt.cloud"
+          target: "/var/www/html/api.ettt.cloud"
 
       - name: Executing remote command
         uses: appleboy/ssh-action@master
