@@ -10,7 +10,7 @@
   <p align="center">
     The api.ettt.cloud is a database API that stores vital information for risitas.fun webapps like Risichat.
     <br />
-    <a href="https://ettt-cloud.stoplight.io/docs/ettt-cloud-api"><strong>Explore the docs »</strong></a>
+    <a href="https://ettt-cloud.readme.io"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/ElliotThiebaut/ettt-api/issues">Report Bug</a>
@@ -102,7 +102,7 @@ This project uses NodeJS as it's runtime, therefore it is required to have at le
 
 This is a Restful API, so any endpoint and data structure follows the convention established by the REST architectural style. To see which endpoints are available and how to use them, a documentation is available.
 
-[Documentation](https://ettt-cloud.stoplight.io/docs/ettt-cloud-api)
+[Documentation](https://ettt-cloud.readme.io)
 
 
 
