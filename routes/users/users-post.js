@@ -8,7 +8,7 @@ export const router = express.Router()
 const saltRounds = 10;
 
 //POST - update a existing user
-router.post('/risichat/update-user/:id', auth, async (req, res, next) => {
+router.put('/risichat/users/:id', auth, async (req, res, next) => {
 
     let dbUser = await dbRisichat.collection('users').findOne({_id: new ObjectId(req.params.id)})
     if (dbUser._id.toLocaleString() !== req.tokenUser.user_id) {
@@ -38,10 +38,11 @@ router.post('/risichat/update-user/:id', auth, async (req, res, next) => {
     let updatedUser = await dbRisichat.collection('users').updateOne({_id : new ObjectId(req.params.id)}, updateUser)
 
     if (updatedUser.acknowledged && updatedUser.matchedCount){
+        //TODO add ID of updated user to 200 response
         res.send({message:'User updated'})
     } else if (!updatedUser.matchedCount) {
         console.log(`No user found with id ${req.params.id} in /users/update`)
-        res.status(204).send()
+        res.status(204).send({message: 'User not found'})
     } else {
         console.log(`A error occurred while updating the user with id ${req.params.id} in /users/update`)
         res.status(500).send({message:'A error occurred while updating the user'})

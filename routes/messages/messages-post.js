@@ -7,7 +7,7 @@ import xss from "xss"
 export const router = express.Router()
 
 //POST - create a new message
-router.post('/risichat/new-message', auth, async (req, res, next) => {
+router.post('/risichat/messages', auth, async (req, res, next) => {
 
     const newMessage = req.body
 
@@ -36,7 +36,7 @@ router.post('/risichat/new-message', auth, async (req, res, next) => {
 
 
 //POST - update a existing message
-router.post('/risichat/update-message/:id', auth, async (req, res, next) => {
+router.put('/risichat/messages/:id', auth, async (req, res, next) => {
 
     const messageToUpdate = req.body
 
@@ -58,7 +58,7 @@ router.post('/risichat/update-message/:id', auth, async (req, res, next) => {
         const updateMessage = {
             $set: {
                 edited_timestamp: Date.now(),
-                content: messageToUpdate.content
+                content: xss(messageToUpdate.content)
             }
         }
 
@@ -67,6 +67,7 @@ router.post('/risichat/update-message/:id', auth, async (req, res, next) => {
 
 
         if (updatedMessage.acknowledged && updatedMessage.matchedCount){
+            // TODO add ID of the message in the response
             res.send({message:'Message updated'})
         } else {
             console.log('A error occurred while updating the message in /messages/update-message')
