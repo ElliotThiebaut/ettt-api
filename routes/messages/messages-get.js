@@ -58,7 +58,7 @@ router.get('/risichat/messages', auth, async (req, res) => {
         })
     } else if (responseDB.length === 0) {
         console.log(`No message found in /messages/get-all`)
-        res.status(204).send()
+        res.status(204).send({message: 'No messages found'})
     } else {
         console.log(`A error occurred while retrieving the messages in /messages/get-all`)
         res.status(500).send({message: 'A error occurred while retrieving the messages'})
@@ -69,7 +69,6 @@ router.get('/risichat/messages', auth, async (req, res) => {
 
 //GET - retrieve messages from a specified user
 router.get('/risichat/messages/:author_id', auth, async (req, res) => {
-
     let optionsQuery = {
         sort: {timestamp: -1}
     }
@@ -117,7 +116,7 @@ router.get('/risichat/messages/:author_id', auth, async (req, res) => {
         })
     } else if (responseDB.length === 0) {
         console.log(`No message found in /messages/get-by-user`)
-        res.status(204).send()
+        res.status(204).send({message: 'No messages found'})
     } else {
         console.log(`A error occurred while retrieving the messages in /messages/get-by-user`)
         res.status(500).send({message: 'A error occurred while retrieving the messages'})
