@@ -16,7 +16,7 @@ router.post('/risichat/auth/register', async (req, res,next) => {
 
     if (!newUser.password || !newUser.username || !newUser.email) {
         console.log('Missing request parameters in /risichat/auth/register')
-        res.status(400).send({message: 'Missing request parameters'})
+        res.status(422).send({message: 'Missing request parameters'})
         return next();
     }
 
@@ -31,7 +31,7 @@ router.post('/risichat/auth/register', async (req, res,next) => {
     let findDuplicateUser = await dbRisichat.collection('users').findOne({email: newUser.email.toLowerCase()})
     if (findDuplicateUser) {
         console.log('Email already used in /risichat/auth/register')
-        res.status(400).send({message: 'Email already used'})
+        res.status(409).send({message: 'Email already used'})
         return next();
     }
 
@@ -62,14 +62,14 @@ router.post('/risichat/auth/login', async (req, res, next) => {
 
     if (!user.password || !user.email) {
         console.log('Missing request parameters in /risichat/auth/login')
-        res.status(400).send({message: 'Missing request parameters'})
+        res.status(422).send({message: 'Missing request parameters'})
         return next();
     }
 
     let dbUser = await dbRisichat.collection('users').findOne({email: user.email.toLowerCase()})
     if (!dbUser) {
         console.log('No user found in /risichat/auth/login')
-        res.status(400).send({message: 'No user found'})
+        res.status(404).send({message: 'No user found'})
         return next();
     }
 
@@ -94,7 +94,7 @@ router.post('/risichat/auth/login', async (req, res, next) => {
 
     } else {
         console.log('Invalid credentials in /risichat/auth/login')
-        res.status(400).send({message: 'Invalid credentials'})
+        res.status(401).send({message: 'Invalid credentials'})
         return next();
     }
 })
